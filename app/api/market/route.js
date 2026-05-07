@@ -7,8 +7,9 @@ export async function GET(req) {
   const contract =
     "0x9eb6e2025b64f340691e424b7fe7022ffde12438";
 
+  // ENV VARIABLE
   const API_KEY =
-    "a4168a01672f394b6c94391fb3d874dc";
+    process.env.OPENSEA_API_KEY;
 
   try {
 
