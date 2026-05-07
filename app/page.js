@@ -58,7 +58,6 @@ export default function Home() {
       owner: "EdMcKenway",
       listed: true,
       price: 5.2,
-      lastSale: "0.01 ETH",
     },
 
   };
@@ -70,12 +69,6 @@ export default function Home() {
     marketData?.owner ||
     fallback?.owner ||
     "Unknown";
-
-  // LAST SALE
-  const lastSale =
-    marketData?.lastSale ||
-    fallback?.lastSale ||
-    "No Sales";
 
   // PRICE
   const currentListing =
@@ -162,7 +155,7 @@ export default function Home() {
         {/* MARKET SECTION */}
         {searched && (
 
-          <div className="mt-20 grid md:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div className="mt-20 grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
 
             {/* OWNER */}
             <div
@@ -244,32 +237,11 @@ export default function Home() {
 
             </div>
 
-            {/* LAST SALE */}
-            <div
-              className="border-2 border-cyan-400/40 bg-black/90 p-6"
-              style={{
-                boxShadow:
-                  "0 0 8px rgba(34,211,238,0.3), 0 0 30px rgba(34,211,238,0.12)",
-                clipPath:
-                  "polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))",
-              }}
-            >
-
-              <div className="text-cyan-300 uppercase tracking-[0.25em] text-xs">
-                Last Sale
-              </div>
-
-              <div className="mt-4 text-2xl font-black">
-                {lastSale}
-              </div>
-
-            </div>
-
           </div>
 
         )}
 
-        {/* NO MUTATION */}
+        {/* NO CUSTOMIZATION */}
         {searched && versions.length === 0 && (
 
           <div
@@ -297,7 +269,7 @@ export default function Home() {
               <div>
 
                 <div className="uppercase tracking-[0.4em] text-red-400 text-sm mb-4">
-                  Mutation Scan Result
+                  Customization Scan Result
                 </div>
 
                 <h2
@@ -306,13 +278,13 @@ export default function Home() {
                     textShadow: "0 0 25px rgba(239,68,68,0.4)",
                   }}
                 >
-                  NO MUTATIONS DETECTED
+                  ORIGINAL STATE
                 </h2>
 
                 <div className="text-zinc-400 leading-relaxed text-lg">
 
-                  This Normie appears untouched.
-                  No historical mutation data detected.
+                  No historical customization activity detected.
+                  This Normie remains in its original onchain state.
 
                 </div>
 
@@ -330,15 +302,6 @@ export default function Home() {
           <div className="space-y-24">
 
             {versions.map((version, index) => {
-
-              const severity =
-                version.changeCount > 150
-                  ? "LEGENDARY"
-                  : version.changeCount > 75
-                  ? "CHAOTIC"
-                  : version.changeCount > 30
-                  ? "UNSTABLE"
-                  : "STABLE";
 
               return (
 
@@ -380,27 +343,61 @@ export default function Home() {
                         V{version.version}
                       </h2>
 
-                      {/* BAR */}
+                      {/* CUSTOMIZATION LEVEL */}
                       <div className="mb-10">
 
-                        <div className="flex justify-between mb-3 text-xs uppercase tracking-[0.25em] text-cyan-300">
+                        <div className="flex justify-between items-center mb-5">
 
-                          <span>Mutation Intensity</span>
+                          <span className="text-cyan-300 uppercase tracking-[0.3em] text-xs">
+                            Customization Level
+                          </span>
 
-                          <span>{severity}</span>
+                          <span
+                            className={`uppercase tracking-[0.3em] text-xs font-bold ${
+                              version.changeCount > 150
+                                ? "text-cyan-300"
+                                : version.changeCount > 50
+                                ? "text-cyan-200"
+                                : "text-zinc-400"
+                            }`}
+                          >
+                            {version.changeCount > 150
+                              ? "HEAVILY CUSTOMIZED"
+                              : version.changeCount > 50
+                              ? "CUSTOMIZED"
+                              : "LIGHTLY CUSTOMIZED"}
+                          </span>
 
                         </div>
 
-                        <div className="w-full h-5 bg-[#111111] border border-cyan-400/20 overflow-hidden">
+                        <div className="flex gap-3">
 
-                          <div
-                            className="h-full bg-cyan-300 transition-all duration-700"
-                            style={{
-                              width: `${Math.min(100, version.changeCount)}%`,
-                              boxShadow:
-                                "0 0 25px rgba(34,211,238,0.7)",
-                            }}
-                          />
+                          {[1, 2, 3, 4, 5].map((box) => {
+
+                            const filled =
+                              version.changeCount >
+                              box * 30;
+
+                            return (
+
+                              <div
+                                key={box}
+                                className={`w-10 h-6 border transition-all duration-500 ${
+                                  filled
+                                    ? "bg-cyan-300 border-cyan-200"
+                                    : "bg-[#111111] border-zinc-700"
+                                }`}
+                                style={{
+                                  boxShadow: filled
+                                    ? "0 0 18px rgba(34,211,238,0.7)"
+                                    : "none",
+                                  imageRendering: "pixelated",
+                                }}
+                              />
+
+                            );
+
+                          })}
 
                         </div>
 

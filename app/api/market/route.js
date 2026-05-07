@@ -7,7 +7,6 @@ export async function GET(req) {
   const contract =
     "0x9eb6e2025b64f340691e424b7fe7022ffde12438";
 
-  // ENV VARIABLE
   const API_KEY =
     process.env.OPENSEA_API_KEY;
 
@@ -44,19 +43,19 @@ export async function GET(req) {
       await listingResponse.json();
 
     // OWNER
-    const owner =
-      nftData?.nft?.owners?.[0]?.address ||
-      "Unknown";
+    let owner = "Unknown";
 
-    // LAST SALE
-    const lastSale =
-      nftData?.nft?.last_sale?.payment?.quantity
-        ? (
-            Number(
-              nftData.nft.last_sale.payment.quantity
-            ) / 1e18
-          ).toFixed(2) + " ETH"
-        : "No Sales";
+    if (
+      nftData?.nft?.owners &&
+      nftData.nft.owners.length > 0
+    ) {
+
+      owner =
+        nftData.nft.owners[0]?.username ||
+        nftData.nft.owners[0]?.address ||
+        "Unknown";
+
+    }
 
     // LISTING
     const order =
@@ -77,8 +76,6 @@ export async function GET(req) {
 
       currentPrice,
 
-      lastSale,
-
     });
 
   } catch (e) {
@@ -92,8 +89,6 @@ export async function GET(req) {
       listed: false,
 
       currentPrice: null,
-
-      lastSale: "No Sales",
 
     });
 
