@@ -14,6 +14,7 @@ export default function Home() {
   const [marketData, setMarketData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [showDonate, setShowDonate] = useState(false);
 
   async function fetchNormie() {
 
@@ -102,7 +103,8 @@ export default function Home() {
         }}
       />
 
-      <div className="relative z-10 px-6 py-20">
+      {/* MAIN */}
+      <div className="relative z-10 px-4 py-10 scale-[0.92] origin-top">
 
         {/* HERO */}
         <div className="text-center">
@@ -274,9 +276,9 @@ export default function Home() {
         )}
 
         {/* TIMELINE */}
-        <div className="mt-24 max-w-7xl mx-auto">
+        <div className="mt-16 max-w-[1700px] mx-auto">
 
-          <div className="grid xl:grid-cols-3 lg:grid-cols-2 gap-8">
+          <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-5">
 
             {versions.map((version, index) => {
 
@@ -288,7 +290,7 @@ export default function Home() {
                 >
 
                   {/* IMAGE */}
-                  <div className="border border-cyan-400/20 bg-[#0d1117] rounded-[24px] p-6 flex items-center justify-center h-[340px]">
+                  <div className="border border-cyan-400/20 bg-[#0d1117] rounded-[24px] p-6 flex items-center justify-center h-[300px]">
 
                     <img
                       src={
@@ -314,7 +316,7 @@ export default function Home() {
                       Evolution Phase
                     </div>
 
-                    <h2 className="text-5xl font-black mb-6">
+                    <h2 className="text-4xl font-black mb-6">
                       V{version.version}
                     </h2>
 
@@ -396,6 +398,36 @@ export default function Home() {
           </div>
 
         </div>
+
+      </div>
+
+      {/* SUPPORT BUTTON */}
+      <div className="fixed bottom-6 right-6 z-50">
+
+        <button
+          onClick={() => setShowDonate(!showDonate)}
+          className="w-16 h-16 rounded-full bg-cyan-300 text-black text-2xl font-black shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:scale-110 transition-all duration-300"
+        >
+          ⚡
+        </button>
+
+        {showDonate && (
+
+          <div className="absolute bottom-20 right-0 w-[320px] rounded-[24px] border border-cyan-400/20 bg-black/90 backdrop-blur-xl p-6 shadow-[0_0_50px_rgba(34,211,238,0.15)]">
+
+            <div className="text-cyan-300 uppercase tracking-[0.3em] text-xs mb-4">
+              Support The Dev
+            </div>
+
+            <div className="text-zinc-300 text-sm break-all font-mono leading-relaxed">
+
+              0xf7220b3D98a58cC2705f0eE2Fb696341427C6208
+
+            </div>
+
+          </div>
+
+        )}
 
       </div>
 
