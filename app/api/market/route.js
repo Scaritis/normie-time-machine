@@ -7,12 +7,15 @@ export async function GET(req) {
   const contract =
     "0x9eb6e2025b64f340691e424b7fe7022ffde12438";
 
+  const collectionSlug =
+    "normies";
+
   const API_KEY =
     process.env.OPENSEA_API_KEY;
 
   try {
 
-    // NFT DETAILS
+    // NFT DATA
     const nftResponse = await fetch(
       `https://api.opensea.io/api/v2/chain/ethereum/contract/${contract}/nfts/${id}`,
       {
@@ -27,9 +30,9 @@ export async function GET(req) {
     const nftData =
       await nftResponse.json();
 
-    // LISTINGS
+    // BEST LISTING
     const listingResponse = await fetch(
-      `https://api.opensea.io/api/v2/orders/ethereum/seaport/listings?asset_contract_address=${contract}&token_ids=${id}&limit=1`,
+      `https://api.opensea.io/api/v2/listings/collection/${collectionSlug}/nfts/${id}/best`,
       {
         headers: {
           accept: "application/json",
@@ -41,6 +44,11 @@ export async function GET(req) {
 
     const listingData =
       await listingResponse.json();
+
+    console.log(
+      "LISTING DATA:",
+      JSON.stringify(listingData, null, 2)
+    );
 
     // OWNER
     let owner = "Unknown";
@@ -57,16 +65,21 @@ export async function GET(req) {
 
     }
 
-    // LISTING
-    const order =
-      listingData?.orders?.[0];
+    // PRICE
+    let currentPrice = null;
 
-    const currentPrice =
-      order?.current_price
-        ? (
-            Number(order.current_price) / 1e18
-          ).toFixed(2)
-        : null;
+    if (
+      listingData?.price?.current?.value
+    ) {
+
+      currentPrice =
+        (
+          Number(
+            listingData.price.current.value
+          ) / 1e18
+        ).toFixed(2);
+
+    }
 
     return Response.json({
 
